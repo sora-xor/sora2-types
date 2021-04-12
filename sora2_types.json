@@ -139,6 +139,20 @@
             ]
           ]
         },
+        "DispatchErrorWithPostInfoTPostDispatchInfo": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "post_info",
+              "PostDispatchInfo"
+            ],
+            [
+              "error",
+              "DispatchError"
+            ]
+          ]
+        },
+        "DispatchResultWithPostInfo": "Result<PostDispatchInfo, DispatchErrorWithPostInfoTPostDispatchInfo>",
         "DistributionAccounts": "Null",
         "Duration": "Null",
         "EthPeersSync": {
@@ -196,6 +210,10 @@
               "AssetName"
             ],
             [
+              "author",
+              "AccountId"
+            ],
+            [
               "tx_hash",
               "H256"
             ],
@@ -217,12 +235,24 @@
           "type": "struct",
           "type_mapping": [
             [
-              "request",
+              "outgoing_request",
               "OutgoingRequest"
+            ],
+            [
+              "outgoing_request_hash",
+              "H256"
+            ],
+            [
+              "initial_request_hash",
+              "H256"
             ],
             [
               "tx_input",
               "Vec<u8>"
+            ],
+            [
+              "author",
+              "AccountId"
             ],
             [
               "tx_hash",
@@ -256,6 +286,10 @@
             [
               "added",
               "bool"
+            ],
+            [
+              "author",
+              "AccountId"
             ],
             [
               "tx_hash",
@@ -295,6 +329,10 @@
               "ChangePeersContract"
             ],
             [
+              "author",
+              "AccountId"
+            ],
+            [
               "tx_hash",
               "H256"
             ],
@@ -310,6 +348,42 @@
               "network_id",
               "BridgeNetworkId"
             ]
+          ]
+        },
+        "IncomingMarkAsDoneRequest": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "outgoing_request_hash",
+              "H256"
+            ],
+            [
+              "initial_request_hash",
+              "H256"
+            ],
+            [
+              "author",
+              "AccountId"
+            ],
+            [
+              "at_height",
+              "u64"
+            ],
+            [
+              "timepoint",
+              "Timepoint"
+            ],
+            [
+              "network_id",
+              "BridgeNetworkId"
+            ]
+          ]
+        },
+        "IncomingMetaRequestKind": {
+          "type": "enum",
+          "value_list": [
+            "CancelOutgoingRequest",
+            "MarkAsDone"
           ]
         },
         "IncomingMigrate": {
@@ -320,6 +394,10 @@
               "EthereumAddress"
             ],
             [
+              "author",
+              "AccountId"
+            ],
+            [
               "tx_hash",
               "H256"
             ],
@@ -337,34 +415,13 @@
             ]
           ]
         },
-        "IncomingPreRequest": {
+        "IncomingPrepareForMigration": {
           "type": "struct",
           "type_mapping": [
             [
               "author",
               "AccountId"
             ],
-            [
-              "hash",
-              "H256"
-            ],
-            [
-              "timepoint",
-              "Timepoint"
-            ],
-            [
-              "kind",
-              "IncomingRequestKind"
-            ],
-            [
-              "network_id",
-              "BridgeNetworkId"
-            ]
-          ]
-        },
-        "IncomingPrepareForMigration": {
-          "type": "struct",
-          "type_mapping": [
             [
               "tx_hash",
               "H256"
@@ -391,7 +448,7 @@
               "IncomingTransfer"
             ],
             [
-              "AddAsset",
+              "AddToken",
               "IncomingAddToken"
             ],
             [
@@ -401,6 +458,10 @@
             [
               "CancelOutgoingRequest",
               "IncomingCancelOutgoingRequest"
+            ],
+            [
+              "MarkAsDone",
+              "IncomingMarkAsDoneRequest"
             ],
             [
               "PrepareForMigration",
@@ -414,15 +475,29 @@
         },
         "IncomingRequestKind": {
           "type": "enum",
+          "type_mapping": [
+            [
+              "Transaction",
+              "IncomingTransactionRequestKind"
+            ],
+            [
+              "Meta",
+              "IncomingMetaRequestKind"
+            ]
+          ]
+        },
+        "IncomingTransactionRequestKind": {
+          "type": "enum",
           "value_list": [
             "Transfer",
             "AddAsset",
             "AddPeer",
             "RemovePeer",
-            "CancelOutgoingRequest",
-            "MarkAsDone",
             "PrepareForMigration",
-            "Migrate"
+            "Migrate",
+            "AddPeerCompat",
+            "RemovePeerCompat",
+            "TransferXOR"
           ]
         },
         "IncomingTransfer": {
@@ -449,6 +524,10 @@
               "Balance"
             ],
             [
+              "author",
+              "AccountId"
+            ],
+            [
               "tx_hash",
               "H256"
             ],
@@ -466,7 +545,7 @@
             ]
           ]
         },
-        "Keys": "SessionKeys2",
+        "Keys": "SessionKeys3",
         "LiquiditySourceType": {
           "type": "enum",
           "value_list": [
@@ -477,6 +556,69 @@
             "MockPool2",
             "MockPool3",
             "MockPool4"
+          ]
+        },
+        "LoadIncomingMetaRequest": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "author",
+              "AccountId"
+            ],
+            [
+              "hash",
+              "H256"
+            ],
+            [
+              "timepoint",
+              "Timepoint"
+            ],
+            [
+              "kind",
+              "IncomingMetaRequestKind"
+            ],
+            [
+              "network_id",
+              "BridgeNetworkId"
+            ]
+          ]
+        },
+        "LoadIncomingRequest": {
+          "type": "enum",
+          "type_mapping": [
+            [
+              "Transaction",
+              "LoadIncomingTransactionRequest"
+            ],
+            [
+              "Meta",
+              "(LoadIncomingMetaRequest, H256)"
+            ]
+          ]
+        },
+        "LoadIncomingTransactionRequest": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "author",
+              "AccountId"
+            ],
+            [
+              "hash",
+              "H256"
+            ],
+            [
+              "timepoint",
+              "Timepoint"
+            ],
+            [
+              "kind",
+              "IncomingTransactionRequestKind"
+            ],
+            [
+              "network_id",
+              "BridgeNetworkId"
+            ]
           ]
         },
         "LookupSource": "AccountId",
@@ -498,8 +640,12 @@
               "(OutgoingRequest, H256)"
             ],
             [
+              "LoadIncoming",
+              "LoadIncomingRequest"
+            ],
+            [
               "Incoming",
-              "IncomingPreRequest"
+              "(IncomingRequest, H256)"
             ]
           ]
         },
@@ -1034,6 +1180,20 @@
         "PendingMultisigAccount": "Null",
         "Permission": "Null",
         "PermissionId": "u32",
+        "PostDispatchInfo": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "actual_weight",
+              "Option<Weight>"
+            ],
+            [
+              "pays_fee",
+              "Pays"
+            ]
+          ]
+        },
+        "Public": "[u8; 33]",
         "QuoteAmount": {
           "type": "enum",
           "type_mapping": [
