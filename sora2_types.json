@@ -76,6 +76,19 @@
             "Migrating"
           ]
         },
+        "BridgeTimepoint": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "height",
+              "MultiChainHeight"
+            ],
+            [
+              "index",
+              "u32"
+            ]
+          ]
+        },
         "ChangePeersContract": {
           "type": "enum",
           "value_list": [
@@ -546,6 +559,44 @@
           ]
         },
         "Keys": "SessionKeys3",
+        "LPRewardsInfo": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "amount",
+              "Balance"
+            ],
+            [
+              "currency",
+              "AssetId"
+            ],
+            [
+              "reason",
+              "RewardReason"
+            ]
+          ]
+        },
+        "LPSwapOutcomeInfo": {
+          "type": "struct",
+          "type_mapping": [
+            [
+              "amount",
+              "Balance"
+            ],
+            [
+              "fee",
+              "Balance"
+            ],
+            [
+              "rewards",
+              "Vec<LPRewardsInfo>"
+            ],
+            [
+              "amount_without_impact",
+              "Balance"
+            ]
+          ]
+        },
         "LiquiditySourceType": {
           "type": "enum",
           "value_list": [
@@ -627,6 +678,19 @@
           "value_list": [
             "Permit",
             "Forbid"
+          ]
+        },
+        "MultiChainHeight": {
+          "type": "enum",
+          "type_mapping": [
+            [
+              "Thischain",
+              "BlockNumber"
+            ],
+            [
+              "Sidechain",
+              "u64"
+            ]
           ]
         },
         "MultiCurrencyBalance": "Balance",
@@ -1236,6 +1300,13 @@
             "Done"
           ]
         },
+        "RewardReason": {
+          "type": "enum",
+          "value_list": [
+            "Unspecified",
+            "BuyOnBondingCurve"
+          ]
+        },
         "Scope": {
           "type": "enum",
           "type_mapping": [
@@ -1384,6 +1455,7 @@
             ]
           ]
         },
+        "Timepoint": "BridgeTimepoint",
         "TradingPair": {
           "type": "struct",
           "type_mapping": [
