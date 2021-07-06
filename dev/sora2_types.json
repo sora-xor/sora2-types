@@ -1342,7 +1342,9 @@
           "type": "enum",
           "value_list": [
             "Unspecified",
-            "BuyOnBondingCurve"
+            "BuyOnBondingCurve",
+            "LiquidityProvisionFarming",
+            "MarketMakerVolume"
           ]
         },
         "Scope": {
